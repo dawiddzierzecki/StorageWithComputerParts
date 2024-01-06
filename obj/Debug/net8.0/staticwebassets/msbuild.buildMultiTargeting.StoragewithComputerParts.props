@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\StoragewithComputerParts.props" />
+</Project>
