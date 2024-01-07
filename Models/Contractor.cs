@@ -15,6 +15,7 @@
         //public Contractor() { }
 
         //Relationships
-        public List<Delivery> Deliveries { get; set; }
+        public List<Delivery>? Deliveries { get; set; }
+        public List<Release>? Releases { get; set; }
     }
 }

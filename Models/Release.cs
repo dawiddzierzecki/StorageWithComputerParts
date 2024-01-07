@@ -10,7 +10,7 @@
         //Relationships
         public int ContractorId { get; set; }
         public Contractor Contractor { get; set; }
-        List<ReleaseProducts> ReleaseProducts { get; set; }
+        List<ReleaseProducts> ReleaseProducts { get; set; } = new List<ReleaseProducts>();
         public Protocol Protocol { get; set; }
         public int ProtocolId { get; set; }
     }

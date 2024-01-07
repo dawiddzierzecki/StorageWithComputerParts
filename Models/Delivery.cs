@@ -7,10 +7,10 @@
         public string? Comment { get; set; }
 
         //Relationships
-        List<DeliveryProducts> DeliveryProducts { get; set; }
+        List<DeliveryProducts> DeliveryProducts { get; set; } = new List<DeliveryProducts>();
         public int ContractorId { get; set; }
 
-        public Protocol Protocol { get; set; }
+        public Protocol Protocol { get; set; } = new Protocol();
         public int ProtocolId { get; set; }
     }
 }

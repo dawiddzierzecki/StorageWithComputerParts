@@ -10,7 +10,7 @@ namespace StoragewithComputerParts.Models
         public ProtocolType ProtocolType { get; set; }
 
         //Relationships
-        public Release Release { get; set; }
-        public Delivery Delivery { get; set; }
+        public Release? Release { get; set; }
+        public Delivery? Delivery { get; set; }
     }
 }
