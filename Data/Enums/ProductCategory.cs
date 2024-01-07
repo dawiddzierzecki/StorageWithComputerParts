@@ -1,7 +1,13 @@
-﻿namespace StoragewithComputerParts.Data.Enums
+﻿
+namespace StoragewithComputerParts.Data.Enums
 {
     public class ProductCategory
     {
+        //public static explicit operator int(ProductCategory v)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         public enum Category
         {
             CPU,

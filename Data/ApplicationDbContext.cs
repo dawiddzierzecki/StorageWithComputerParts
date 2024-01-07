@@ -46,5 +46,7 @@ namespace StoragewithComputerParts.Data
 
             base.OnModelCreating(builder);
         }
+        public DbSet<StoragewithComputerParts.Models.Contractor> Contractor { get; set; } = default!;
+        public DbSet<StoragewithComputerParts.Models.Product> Product { get; set; } = default!;
     }
 }
