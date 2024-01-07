@@ -1,0 +1,68 @@
+﻿@model StoragewithComputerParts.Models.Contractor
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Contractor</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ContractorName" class="control-label"></label>
+                <input asp-for="ContractorName" class="form-control" />
+                <span asp-validation-for="ContractorName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractorAddress" class="control-label"></label>
+                <input asp-for="ContractorAddress" class="form-control" />
+                <span asp-validation-for="ContractorAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractorCity" class="control-label"></label>
+                <input asp-for="ContractorCity" class="form-control" />
+                <span asp-validation-for="ContractorCity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractorPostalCode" class="control-label"></label>
+                <input asp-for="ContractorPostalCode" class="form-control" />
+                <span asp-validation-for="ContractorPostalCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractorNIP" class="control-label"></label>
+                <input asp-for="ContractorNIP" class="form-control" />
+                <span asp-validation-for="ContractorNIP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractorPhoneNumber" class="control-label"></label>
+                <input asp-for="ContractorPhoneNumber" class="form-control" />
+                <span asp-validation-for="ContractorPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractorEmail" class="control-label"></label>
+                <input asp-for="ContractorEmail" class="form-control" />
+                <span asp-validation-for="ContractorEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractorWebsite" class="control-label"></label>
+                <input asp-for="ContractorWebsite" class="form-control" />
+                <span asp-validation-for="ContractorWebsite" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
