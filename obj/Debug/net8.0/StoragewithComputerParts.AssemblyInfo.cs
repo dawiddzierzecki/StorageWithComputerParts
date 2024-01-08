@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StoragewithComputerParts")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+53e97dcd656e8d436344c5503eaebe27f6392477")]
 [assembly: System.Reflection.AssemblyProductAttribute("StoragewithComputerParts")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StoragewithComputerParts")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

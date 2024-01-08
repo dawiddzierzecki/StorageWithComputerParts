@@ -11,6 +11,18 @@ namespace StoragewithComputerParts.Data
         {
         }
 
+
+        public DbSet<StoragewithComputerParts.Models.Contractor> Contractors { get; set; } = default!;
+        public DbSet<StoragewithComputerParts.Models.Product> Products { get; set; } = default!;
+        public DbSet<StoragewithComputerParts.Models.Delivery> Deliveries { get; set; } = default!;
+        public DbSet<StoragewithComputerParts.Models.Protocol> Protocols { get; set; } = default!;
+        public DbSet<StoragewithComputerParts.Models.Release> Releases { get; set; } = default!;
+        public DbSet<StoragewithComputerParts.Models.Stock> Stocks { get; set; } = default!;
+        public DbSet<StoragewithComputerParts.Models.DeliveryProducts> DeliveryProducts { get; set; } = default!;
+        public DbSet<StoragewithComputerParts.Models.ReleaseProducts> ReleaseProducts { get; set; } = default!;
+
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Equals(builder.Entity<ReleaseProducts>()
@@ -42,11 +54,10 @@ namespace StoragewithComputerParts.Data
             //    .HasForeignKey(rp => rp.ReleaseId);
 
             builder.Equals(builder.Entity<Stock>()
-                                .HasKey(s => new { s.ProductId, s.Quantity }));
+                                .HasKey(s => s.ProductId));
 
             base.OnModelCreating(builder);
         }
-        public DbSet<StoragewithComputerParts.Models.Contractor> Contractor { get; set; } = default!;
-        public DbSet<StoragewithComputerParts.Models.Product> Product { get; set; } = default!;
+
     }
 }

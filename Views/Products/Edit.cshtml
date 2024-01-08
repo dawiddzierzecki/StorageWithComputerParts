@@ -25,7 +25,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProductCategory" class="control-label"></label>
-                <select asp-for="ProductCategory" class="form-control"></select>
+                <select asp-for="ProductCategory" class="form-control">
+                    <option value="Choose Category"></option>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select>
                 <span asp-validation-for="ProductCategory" class="text-danger"></span>
             </div>
             <div class="form-group">

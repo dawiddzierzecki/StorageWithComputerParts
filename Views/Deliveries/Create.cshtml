@@ -1,0 +1,86 @@
+﻿@model StoragewithComputerParts.Models.Delivery
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Delivery</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DeliveryDate" class="control-label"></label>
+                <input asp-for="DeliveryDate" class="form-control" />
+                <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label"></label>
+                <input asp-for="Comment" class="form-control" />
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contractor" class="control-label"></label>
+                <select asp-for="Contractor" class="form-control" asp-items="@ViewBag.ContractorList"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProtocolId" class="control-label"></label>
+                <select asp-for="ProtocolId" class="form-control" asp-items="ViewBag.ProtocolId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <h4>Delivery Products</h4>
+        <div id="selectedProducts"></div>
+
+        <div class="form-group mt-3">
+            <button type="button" class="btn btn-primary" id="addProductBtn">Dodaj produkt</button>
+        </div>
+
+        <div id="productFields" style="display: none;">
+            <select id="productSelect" class="form-control">
+                @foreach (var product in ViewBag.Products)
+                {
+                    <option value="@product.ProductId">@product.ProductName</option>
+                }
+            </select>
+            <input type="number" id="quantityInput" value="0" min="0" class="form-control" />
+            <button type="button" id="confirmProductBtn" class="btn btn-success mt-2">Potwierdź</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Logika obsługująca dodawanie towaru
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("addProductBtn").addEventListener("click", function () {
+                document.getElementById("productFields").style.display = "block";
+            });
+
+            document.getElementById("confirmProductBtn").addEventListener("click", function () {
+                var productId = document.getElementById("productSelect").value;
+                var productName = document.getElementById("productSelect").options[document.getElementById("productSelect").selectedIndex].text;
+                var quantity = document.getElementById("quantityInput").value;
+
+                var selectedProductsDiv = document.getElementById("selectedProducts");
+                var productDiv = document.createElement("div");
+                productDiv.innerHTML = productName + ": " + quantity;
+                selectedProductsDiv.appendChild(productDiv);
+
+                // Ukrycie pola wyboru produktu po dodaniu
+                document.getElementById("productFields").style.display = "none";
+            });
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

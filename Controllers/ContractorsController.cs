@@ -22,7 +22,7 @@ namespace StoragewithComputerParts.Controllers
         // GET: Contractors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Contractor.ToListAsync());
+            return View(await _context.Contractors.ToListAsync());
         }
 
         // GET: Contractors/Details/5
@@ -33,7 +33,7 @@ namespace StoragewithComputerParts.Controllers
                 return NotFound();
             }
 
-            var contractor = await _context.Contractor
+            var contractor = await _context.Contractors
                 .FirstOrDefaultAsync(m => m.ContractorId == id);
             if (contractor == null)
             {
@@ -73,7 +73,7 @@ namespace StoragewithComputerParts.Controllers
                 return NotFound();
             }
 
-            var contractor = await _context.Contractor.FindAsync(id);
+            var contractor = await _context.Contractors.FindAsync(id);
             if (contractor == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace StoragewithComputerParts.Controllers
                 return NotFound();
             }
 
-            var contractor = await _context.Contractor
+            var contractor = await _context.Contractors
                 .FirstOrDefaultAsync(m => m.ContractorId == id);
             if (contractor == null)
             {
@@ -139,10 +139,10 @@ namespace StoragewithComputerParts.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var contractor = await _context.Contractor.FindAsync(id);
+            var contractor = await _context.Contractors.FindAsync(id);
             if (contractor != null)
             {
-                _context.Contractor.Remove(contractor);
+                _context.Contractors.Remove(contractor);
             }
 
             await _context.SaveChangesAsync();
@@ -151,7 +151,7 @@ namespace StoragewithComputerParts.Controllers
 
         private bool ContractorExists(int id)
         {
-            return _context.Contractor.Any(e => e.ContractorId == id);
+            return _context.Contractors.Any(e => e.ContractorId == id);
         }
     }
 }
