@@ -46,7 +46,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // GET: Products/Create
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewBag.Categories = Enum.GetValues(typeof(Data.Enums.ProductCategory.Category)).Cast<Data.Enums.ProductCategory.Category>().ToList();
@@ -60,7 +60,7 @@ namespace StoragewithComputerParts.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductDescription,ProductCategory")] Product product)
         {
             if (ModelState.IsValid)
@@ -74,7 +74,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // GET: Products/Edit/5
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -96,7 +96,7 @@ namespace StoragewithComputerParts.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductDescription,ProductCategory")] Product product)
         {
             if (id != product.ProductId)
@@ -129,7 +129,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // GET: Products/Delete/5
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -150,7 +150,7 @@ namespace StoragewithComputerParts.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Products.FindAsync(id);

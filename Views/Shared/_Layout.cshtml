@@ -37,18 +37,8 @@
 @*                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li> *@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index"><i class="bi bi-building"></i> Stock</a>
-                        </li>
                         
-                        @*NAV-BARS FOR ADMIN*@
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area=""  asp-controller="Contractors" asp-action="Index"><i class="bi bi-building"></i> Contractors</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index"><i class="bi bi-shop"></i> Products</a>
-                        </li> *@
+                        
                         @using Microsoft.AspNetCore.Identity
                         @if (User.IsInRole("Admin"))
                         {
@@ -64,7 +54,9 @@
                             </div>
                         }
 
-
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index"><i class="bi bi-building"></i> Stock</a>
+                        </li> 
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Deliveries" asp-action="Index"><i class="bi bi-box-fill"></i> Deliveries</a>
                         </li>

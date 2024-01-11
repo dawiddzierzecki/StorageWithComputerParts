@@ -45,7 +45,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // GET: Contractors/Create
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +56,7 @@ namespace StoragewithComputerParts.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("ContractorId,ContractorName,ContractorAddress,ContractorCity,ContractorPostalCode,ContractorNIP,ContractorPhoneNumber,ContractorEmail,ContractorWebsite")] Contractor contractor)
         {
             if (ModelState.IsValid)
@@ -69,7 +69,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // GET: Contractors/Edit/5
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +90,7 @@ namespace StoragewithComputerParts.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("ContractorId,ContractorName,ContractorAddress,ContractorCity,ContractorPostalCode,ContractorNIP,ContractorPhoneNumber,ContractorEmail,ContractorWebsite")] Contractor contractor)
         {
             if (id != contractor.ContractorId)
@@ -122,7 +122,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // GET: Contractors/Delete/5
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,9 +141,9 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // POST: Contractors/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("ADMIN")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var contractor = await _context.Contractors.FindAsync(id);

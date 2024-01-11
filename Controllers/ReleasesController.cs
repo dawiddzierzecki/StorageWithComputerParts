@@ -50,36 +50,8 @@ namespace StoragewithComputerParts.Controllers
         }
 
 
-        // GET: Releases/Create
-        [Authorize(Roles = "user")]
-        public IActionResult Create()
-        {
-            ViewData["ContractorId"] = new SelectList(_context.Contractors, "ContractorId", "ContractorEmail");
-            ViewData["ProtocolId"] = new SelectList(_context.Protocols, "ProtocolId", "ProtocolId");
-            return View();
-        }
-
-        // POST: Releases/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "user")]
-        public async Task<IActionResult> Create([Bind("ReleaseId,Quantity,Comment,ReleaseDate,ContractorId,ProtocolId")] Release release)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(release);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ContractorId"] = new SelectList(_context.Contractors, "ContractorId", "ContractorEmail", release.ContractorId);
-            ViewData["ProtocolId"] = new SelectList(_context.Protocols, "ProtocolId", "ProtocolId", release.ProtocolId);
-            return View(release);
-        }
-
         // GET: Releases/Edit/5
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -102,7 +74,7 @@ namespace StoragewithComputerParts.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(int id, [Bind("ReleaseId,Quantity,Comment,ReleaseDate,ContractorId,ProtocolId")] Release release)
         {
             if (id != release.ReleaseId)
@@ -136,7 +108,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // GET: Releases/Delete/5
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -159,7 +131,7 @@ namespace StoragewithComputerParts.Controllers
         // POST: Releases/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var release = await _context.Releases.FindAsync(id);
@@ -178,7 +150,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         //GET: Release/Add
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public IActionResult Add()
         {
             // Pobieranie listy produktów z bazy danych
@@ -195,7 +167,7 @@ namespace StoragewithComputerParts.Controllers
         // POST: Delivery/Add
         [HttpPost, ActionName("Add")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public IActionResult Add(AddDeliveryViewModel viewModel)
         {
             // Pobierz stan magazynu dla każdego produktu

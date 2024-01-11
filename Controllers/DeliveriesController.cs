@@ -49,7 +49,7 @@ namespace StoragewithComputerParts.Controllers
             return View(delivery);
         }
 
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         // GET: Deliveries/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -73,7 +73,7 @@ namespace StoragewithComputerParts.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(int id, [Bind("DeliveryId,DeliveryDate,Comment,ContractorId,ProtocolId")] Delivery delivery)
         {
             if (id != delivery.DeliveryId)
@@ -107,7 +107,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // GET: Deliveries/Delete/5
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,7 +130,7 @@ namespace StoragewithComputerParts.Controllers
         // POST: Deliveries/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var delivery = await _context.Deliveries.FindAsync(id);
@@ -150,7 +150,7 @@ namespace StoragewithComputerParts.Controllers
 
 
         // GET: Delivery/Add
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public IActionResult Add()
         {
             // Pobieranie listy produktów z bazy danych (może być inna metoda pobierania)
@@ -166,7 +166,7 @@ namespace StoragewithComputerParts.Controllers
         // POST: Delivery/Add
         [HttpPost, ActionName("Add")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "User")]
         public IActionResult Add(AddDeliveryViewModel viewModel)
         {
             if (ModelState.IsValid)
