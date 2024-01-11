@@ -12,7 +12,7 @@
 
         //Relationships
         public Stock? Stock { get; set; }
-        public List<ReleaseProducts> ReleaseProducts { get; set; } = new List<ReleaseProducts>();
+        public List<ReleaseProducts> ReleaseProducts { get; } = new List<ReleaseProducts>();
         public List<DeliveryProducts> DeliveryProducts { get; set; } = new List<DeliveryProducts>();
 
     }

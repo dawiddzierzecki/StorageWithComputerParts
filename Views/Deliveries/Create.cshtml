@@ -9,7 +9,7 @@
 <h4>Delivery</h4>
 <hr />
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -23,64 +23,36 @@
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Contractor" class="control-label"></label>
-                <select asp-for="Contractor" class="form-control" asp-items="@ViewBag.ContractorList"></select>
+                <label asp-for="ContractorId" class="control-label"></label>
+                <select asp-for="ContractorId" class ="form-control" asp-items="ViewBag.ContractorId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ProtocolId" class="control-label"></label>
-                <select asp-for="ProtocolId" class="form-control" asp-items="ViewBag.ProtocolId"></select>
+                <select asp-for="ProtocolId" class ="form-control" asp-items="ViewBag.ProtocolId"></select>
             </div>
+            @for(int i = 0; i<ViewBag.Products.Count; i++)
+            {
+                <div class="form-group">
+                    <label  class="control-label">
+                        @ViewBag.Products[i].ProductName
+                    </label>
+                    <input asp-for="DeliveryProducts[i].Quantity" class="form-control" />
+                    <input value="@ViewBag.Products[i].ProductId" name="DeliveryProducts[@i].ProductId" type="hidden" />
+                    @* <hidden asp-for="DeliveryProducts[i].ProductId" class="form-control" /> *@
+                    @* <span asp-validation-for="DeliveryProducts" class="text-danger"></span> *@
+                </div>
+            }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
+</div>
 
-    <div class="col-md-6">
-        <h4>Delivery Products</h4>
-        <div id="selectedProducts"></div>
-
-        <div class="form-group mt-3">
-            <button type="button" class="btn btn-primary" id="addProductBtn">Dodaj produkt</button>
-        </div>
-
-        <div id="productFields" style="display: none;">
-            <select id="productSelect" class="form-control">
-                @foreach (var product in ViewBag.Products)
-                {
-                    <option value="@product.ProductId">@product.ProductName</option>
-                }
-            </select>
-            <input type="number" id="quantityInput" value="0" min="0" class="form-control" />
-            <button type="button" id="confirmProductBtn" class="btn btn-success mt-2">Potwierdź</button>
-        </div>
-    </div>
+<div>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    <script>
-        // Logika obsługująca dodawanie towaru
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("addProductBtn").addEventListener("click", function () {
-                document.getElementById("productFields").style.display = "block";
-            });
-
-            document.getElementById("confirmProductBtn").addEventListener("click", function () {
-                var productId = document.getElementById("productSelect").value;
-                var productName = document.getElementById("productSelect").options[document.getElementById("productSelect").selectedIndex].text;
-                var quantity = document.getElementById("quantityInput").value;
-
-                var selectedProductsDiv = document.getElementById("selectedProducts");
-                var productDiv = document.createElement("div");
-                productDiv.innerHTML = productName + ": " + quantity;
-                selectedProductsDiv.appendChild(productDiv);
-
-                // Ukrycie pola wyboru produktu po dodaniu
-                document.getElementById("productFields").style.display = "none";
-            });
-        });
-    </script>
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

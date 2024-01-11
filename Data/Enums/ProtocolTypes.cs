@@ -1,11 +1,9 @@
 ﻿namespace StoragewithComputerParts.Data.Enums
 {
-    public class ProtocolTypes
+    public enum ProtocolType
     {
-        public enum ProtocolType
-        {
-            Delivery,
-            Release
-        }
+        Delivery,
+        Release
     }
+
 }

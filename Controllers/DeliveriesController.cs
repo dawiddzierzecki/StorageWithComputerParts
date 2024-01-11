@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoragewithComputerParts.Data;
+using StoragewithComputerParts.Data.Enums;
 using StoragewithComputerParts.Models;
+using StoragewithComputerParts.ViewModels;
 
 namespace StoragewithComputerParts.Controllers
 {
@@ -22,7 +24,7 @@ namespace StoragewithComputerParts.Controllers
         // GET: Deliveries
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Deliveries.Include(d => d.Protocol);
+            var applicationDbContext = _context.Deliveries.Include(d => d.Contractor).Include(d => d.Protocol);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,6 +37,7 @@ namespace StoragewithComputerParts.Controllers
             }
 
             var delivery = await _context.Deliveries
+                .Include(d => d.Contractor)
                 .Include(d => d.Protocol)
                 .FirstOrDefaultAsync(m => m.DeliveryId == id);
             if (delivery == null)
@@ -48,19 +51,10 @@ namespace StoragewithComputerParts.Controllers
         // GET: Deliveries/Create
         public IActionResult Create()
         {
-            ViewData["ProtocolId"] = new SelectList(_context.Set<Protocol>(), "ProtocolId", "ProtocolId");
+            ViewData["ContractorId"] = new SelectList(_context.Contractors, "ContractorId", "ContractorEmail");
+            ViewData["ProtocolId"] = new SelectList(_context.Protocols, "ProtocolId", "ProtocolId");
+
             ViewBag.Products = _context.Products.ToList();
-
-            var contractors = _context.Contractors.ToList();
-
-            var contractorList = contractors.Select(c => new SelectListItem
-            {
-                Text = c.ContractorName,
-                Value = c.ContractorId.ToString()
-            }).ToList();
-
-            ViewBag.ContractorList = contractorList;
-
             return View();
         }
 
@@ -69,73 +63,18 @@ namespace StoragewithComputerParts.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DeliveryId,DeliveryDate,Comment,ContractorId,ProtocolId")] Delivery delivery, List<int> productIds, List<int> quantities)
+        public async Task<IActionResult> Create (Delivery delivery)
         {
-            if (ModelState.IsValid && productIds != null && quantities != null && productIds.Count == quantities.Count)
+            if (ModelState.IsValid)
             {
-                using (var transaction = _context.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        _context.Add(delivery);
-                        await _context.SaveChangesAsync();
-
-                        for (int i = 0; i < productIds.Count; i++)
-                        {
-                            var productId = productIds[i];
-                            var quantity = quantities[i];
-
-                            // Tworzenie wpisu w tabeli DeliveryProducts
-                            var deliveryProduct = new DeliveryProducts
-                            {
-                                DeliveryId = delivery.DeliveryId,
-                                ProductId = productId,
-                                Quantity = quantity
-                            };
-
-                            _context.Add(deliveryProduct);
-
-                            // Aktualizacja ilości w tabeli Stock
-                            var stock = await _context.Stocks.FirstOrDefaultAsync(s => s.ProductId == productId);
-                            if (stock != null)
-                            {
-                                stock.Quantity += quantity;
-                                _context.Update(stock);
-                            }
-                            else
-                            {
-                                // Jeśli produkt nie istnieje w magazynie, możesz utworzyć nowy wpis w Stock
-                                var newStock = new Stock
-                                {
-                                    ProductId = productId,
-                                    Quantity = quantity
-                                };
-                                _context.Add(newStock);
-                            }
-                        }
-
-                        await _context.SaveChangesAsync();
-                        transaction.Commit();
-
-                        return RedirectToAction(nameof(Index));
-                    }
-                    catch (Exception)
-                    {
-                        // Obsługa błędu - cofnięcie transakcji w przypadku niepowodzenia
-                        transaction.Rollback();
-                        ModelState.AddModelError(string.Empty, "Failed to create delivery.");
-                    }
-                }
+                _context.Add(delivery);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-
-            // Jeśli coś poszło nie tak, zwróć widok z błędem
-            ViewData["ProtocolId"] = new SelectList(_context.Set<Protocol>(), "ProtocolId", "ProtocolId", delivery.ProtocolId);
-            ViewBag.Products = _context.Products.ToList();
-            //ViewBag.Contractors = _context.Contractors.ToList();
+            ViewData["ContractorId"] = new SelectList(_context.Contractors, "ContractorId", "ContractorEmail", delivery.ContractorId);
+            ViewData["ProtocolId"] = new SelectList(_context.Protocols, "ProtocolId", "ProtocolId", delivery.ProtocolId);
             return View(delivery);
         }
-
-
 
         // GET: Deliveries/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -150,7 +89,8 @@ namespace StoragewithComputerParts.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProtocolId"] = new SelectList(_context.Set<Protocol>(), "ProtocolId", "ProtocolId", delivery.ProtocolId);
+            ViewData["ContractorId"] = new SelectList(_context.Contractors, "ContractorId", "ContractorEmail", delivery.ContractorId);
+            ViewData["ProtocolId"] = new SelectList(_context.Protocols, "ProtocolId", "ProtocolId", delivery.ProtocolId);
             return View(delivery);
         }
 
@@ -186,7 +126,8 @@ namespace StoragewithComputerParts.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProtocolId"] = new SelectList(_context.Set<Protocol>(), "ProtocolId", "ProtocolId", delivery.ProtocolId);
+            ViewData["ContractorId"] = new SelectList(_context.Contractors, "ContractorId", "ContractorEmail", delivery.ContractorId);
+            ViewData["ProtocolId"] = new SelectList(_context.Protocols, "ProtocolId", "ProtocolId", delivery.ProtocolId);
             return View(delivery);
         }
 
@@ -199,6 +140,7 @@ namespace StoragewithComputerParts.Controllers
             }
 
             var delivery = await _context.Deliveries
+                .Include(d => d.Contractor)
                 .Include(d => d.Protocol)
                 .FirstOrDefaultAsync(m => m.DeliveryId == id);
             if (delivery == null)
@@ -228,5 +170,75 @@ namespace StoragewithComputerParts.Controllers
         {
             return _context.Deliveries.Any(e => e.DeliveryId == id);
         }
+
+
+        // GET: Delivery/Add
+        public IActionResult Add()
+        {
+            // Pobieranie listy produktów z bazy danych (może być inna metoda pobierania)
+            var products = _context.Products.ToList();
+            var contractors = _context.Contractors.ToList();
+            //var protocols = _context.Protocols.ToList();
+
+            ViewBag.Contractors = contractors;
+            ViewBag.Products = products;
+            return View();
+        }
+
+        // POST: Delivery/Add
+        [HttpPost, ActionName("Add")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Add(AddDeliveryViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                // Utwórz nowy obiekt Protocol
+                var newProtocol = new Protocol
+                {
+                    ProtocolDate = DateTime.Now, // Ustaw datę protokołu na aktualny czas
+                    Comment = "YourCommentHere", // Ustaw komentarz na odpowiednią wartość
+                    ProtocolType = ProtocolType.Delivery, // Ustaw typ protokołu na odpowiednią wartość
+                    ProtocolFilePath = "YourFilePathHere" // Ustaw ścieżkę pliku protokołu na odpowiednią wartość
+                };
+
+
+                // Utwórz nową dostawę na podstawie danych z widoku
+                var newDelivery = new Delivery
+                {
+                    DeliveryDate = viewModel.DeliveryTime, // Ustaw datę dostawy na podstawie danych z widoku
+                    Comment = viewModel.Comment, // Ustaw komentarz na podstawie danych z widoku
+                    ContractorId = viewModel.ContractorId, // Ustaw identyfikator kontrahenta na podstawie danych z widoku
+                    Protocol = newProtocol, // Ustaw protokół na nowy protokół
+                    DeliveryProducts = viewModel.Products.Where(p => p.Quantity > 0).Select(p => new DeliveryProducts
+                    {
+                        ProductId = p.ProductId,
+                        Quantity = p.Quantity
+                    }).ToList()
+                };
+
+                
+                
+
+                // Dodaj nową dostawę do kontekstu bazy danych
+                _context.Deliveries.Add(newDelivery);
+
+                // Zapisz zmiany w celu nadania dostawie identyfikatora
+                _context.SaveChanges();
+
+                return RedirectToAction("Index", "Home"); // Przekierowanie po dodaniu dostawy
+            }
+
+            // Jeśli ModelState nie jest poprawne, zwróć widok z powrotem z błędami
+            // Pobieranie listy produktów z bazy danych (może być inna metoda pobierania)
+            var products = _context.Products.ToList();
+            var contractors = _context.Contractors.ToList();
+            //var protocols = _context.Protocols.ToList();
+
+            ViewBag.Contractors = contractors;
+            ViewBag.Products = products;
+            return View(viewModel);
+        }
+
+
     }
 }

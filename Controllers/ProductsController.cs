@@ -48,6 +48,8 @@ namespace StoragewithComputerParts.Controllers
         public IActionResult Create()
         {
             ViewBag.Categories = Enum.GetValues(typeof(Data.Enums.ProductCategory.Category)).Cast<Data.Enums.ProductCategory.Category>().ToList();
+            List<Product> products = _context.Products.ToList();
+            ViewBag.Products = products;
             return View();
         }
 
