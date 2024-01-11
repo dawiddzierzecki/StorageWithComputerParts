@@ -37,7 +37,9 @@
 @*                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li> *@
-                        
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Stock" asp-action="Index"><i class="bi bi-building"></i> Stock</a>
+                        </li>
                         
                         @*NAV-BARS FOR ADMIN*@
                         @* <li class="nav-item">
@@ -61,7 +63,15 @@
                                 </div>
                             </div>
                         }
-                        
+
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Deliveries" asp-action="Index"><i class="bi bi-box-fill"></i> Deliveries</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Releases" asp-action="Index"><i class="bi bi-box-seam"></i> Releases</a>
+                        </li>
+
 
 
                     </ul>
@@ -75,12 +85,12 @@
             @RenderBody()
         </main>
     </div>
-
+@* 
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - StoragewithComputerParts - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer> *@
 
     
     @await RenderSectionAsync("Scripts", required: false)

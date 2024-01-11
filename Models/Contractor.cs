@@ -17,7 +17,7 @@ namespace StoragewithComputerParts.Models
         public string ContractorNIP { get; set; }
 
         [Required(ErrorMessage = "You must provide a phone number")]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$", ErrorMessage = "Not a valid phone number")]
+        [RegularExpression(@"^\(?([0-9]{3})\)??([0-9]{3})?([0-9]{3})$", ErrorMessage = "Not a valid phone number")]
         public string ContractorPhoneNumber { get; set; }
 
         [Required(ErrorMessage = "The email address is required")]

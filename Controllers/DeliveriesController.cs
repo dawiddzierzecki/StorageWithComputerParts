@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -48,34 +49,7 @@ namespace StoragewithComputerParts.Controllers
             return View(delivery);
         }
 
-        // GET: Deliveries/Create
-        public IActionResult Create()
-        {
-            ViewData["ContractorId"] = new SelectList(_context.Contractors, "ContractorId", "ContractorEmail");
-            ViewData["ProtocolId"] = new SelectList(_context.Protocols, "ProtocolId", "ProtocolId");
-
-            ViewBag.Products = _context.Products.ToList();
-            return View();
-        }
-
-        // POST: Deliveries/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create (Delivery delivery)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(delivery);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ContractorId"] = new SelectList(_context.Contractors, "ContractorId", "ContractorEmail", delivery.ContractorId);
-            ViewData["ProtocolId"] = new SelectList(_context.Protocols, "ProtocolId", "ProtocolId", delivery.ProtocolId);
-            return View(delivery);
-        }
-
+        [Authorize(Roles = "user")]
         // GET: Deliveries/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -99,6 +73,7 @@ namespace StoragewithComputerParts.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> Edit(int id, [Bind("DeliveryId,DeliveryDate,Comment,ContractorId,ProtocolId")] Delivery delivery)
         {
             if (id != delivery.DeliveryId)
@@ -132,6 +107,7 @@ namespace StoragewithComputerParts.Controllers
         }
 
         // GET: Deliveries/Delete/5
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -154,6 +130,7 @@ namespace StoragewithComputerParts.Controllers
         // POST: Deliveries/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var delivery = await _context.Deliveries.FindAsync(id);
@@ -173,6 +150,7 @@ namespace StoragewithComputerParts.Controllers
 
 
         // GET: Delivery/Add
+        [Authorize(Roles = "user")]
         public IActionResult Add()
         {
             // Pobieranie listy produktów z bazy danych (może być inna metoda pobierania)
@@ -188,6 +166,7 @@ namespace StoragewithComputerParts.Controllers
         // POST: Delivery/Add
         [HttpPost, ActionName("Add")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "user")]
         public IActionResult Add(AddDeliveryViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -216,20 +195,21 @@ namespace StoragewithComputerParts.Controllers
                     }).ToList()
                 };
 
-                
-                
-
                 // Dodaj nową dostawę do kontekstu bazy danych
                 _context.Deliveries.Add(newDelivery);
 
                 // Zapisz zmiany w celu nadania dostawie identyfikatora
                 _context.SaveChanges();
 
+                // Aktualizuj stan magazynu na podstawie nowej dostawy
+                UpdateStock(newDelivery);
+
+
                 return RedirectToAction("Index", "Home"); // Przekierowanie po dodaniu dostawy
             }
 
             // Jeśli ModelState nie jest poprawne, zwróć widok z powrotem z błędami
-            // Pobieranie listy produktów z bazy danych (może być inna metoda pobierania)
+            // Pobieranie listy produktów z bazy danych
             var products = _context.Products.ToList();
             var contractors = _context.Contractors.ToList();
             //var protocols = _context.Protocols.ToList();
@@ -239,6 +219,30 @@ namespace StoragewithComputerParts.Controllers
             return View(viewModel);
         }
 
+        private void UpdateStock(Delivery newDelivery)
+        {
+            foreach (var deliveryProduct in newDelivery.DeliveryProducts)
+            {
+                // Sprawdź, czy produkt istnieje już w magazynie
+                var stockItem = _context.Stocks.FirstOrDefault(s => s.ProductId == deliveryProduct.ProductId);
 
+                if (stockItem != null)
+                {
+                    // Produkt istnieje w magazynie - zaktualizuj ilość
+                    stockItem.Quantity += deliveryProduct.Quantity;
+                }
+                else
+                {
+                    // Produkt nie istnieje w magazynie - dodaj nowy wpis
+                    _context.Stocks.Add(new Stock
+                    {
+                        ProductId = deliveryProduct.ProductId,
+                        Quantity = deliveryProduct.Quantity
+                    });
+                }
+            }
+            // Zapisz zmiany w magazynie
+            _context.SaveChanges();
+        }
     }
 }
