@@ -1,0 +1,36 @@
+﻿@model StoragewithComputerParts.ViewModels.AddDeliveryViewModel
+
+@using (Html.BeginForm("Add", "Deliveries", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        <h2>Add Delivery</h2>
+
+        <label for="DeliveryDate">Delivery Date:</label>
+        <input asp-for="DeliveryTime" class="form-control" />
+        @* @Html.TextBoxFor(model => model.DeliveryTime, new { @class = "form-control" }) *@
+
+        <label for="Comment">Comment:</label>
+        @Html.TextBoxFor(model => model.Comment, new { @class = "form-control" })
+
+        <label for="ContractorId">Contractor:</label>
+        @* Drop-down list for selecting contractor *@
+        @* Replace "Contractors" with your actual collection of contractors *@
+        @Html.DropDownListFor(model => model.ContractorId, new SelectList(ViewBag.Contractors, "ContractorId", "ContractorName"), "Select Contractor", new { @class = "form-control" })
+
+
+        <hr />
+        <h3>Products:</h3>
+
+        @for (var i = 0; i < ViewBag.Products.Count; i++)
+        {
+            <label>Product: @ViewBag.Products[i].ProductName</label>
+            <input type="number" name="Products[@i].Quantity" class="form-control" />
+            <input value="@ViewBag.Products[i].ProductId" name="Products[@i].ProductId" type="hidden" />
+        }
+
+
+        <input type="submit" value="Add Delivery" class="btn btn-primary" />
+    </div>
+}

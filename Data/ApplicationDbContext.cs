@@ -11,42 +11,47 @@ namespace StoragewithComputerParts.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        public DbSet<Contractor> Contractors { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<Protocol> Protocols { get; set; }
+        public DbSet<Release> Releases { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<DeliveryProducts> DeliveryProducts { get; set; }
+        public DbSet<ReleaseProducts> ReleaseProducts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            builder.Equals(builder.Entity<ReleaseProducts>()
-                                .HasKey(rp => new { rp.ReleaseId, rp.ProductId }));
+            base.OnModelCreating(modelBuilder);
 
-            builder.Equals(builder.Entity<DeliveryProducts>()
-                                .HasKey(rp => new { rp.DeliveryId, rp.ProductId }));
+            modelBuilder.Entity<ReleaseProducts>()
+                .HasKey(rp => new { rp.ReleaseId, rp.ProductId });
 
-            //builder.Entity<Product>()
-            //    .HasOne(p => p.Stock)
-            //    .WithOne(s => s.Product)
-            //    .HasForeignKey<Stock>(s => s.ProductId);
+            modelBuilder.Entity<DeliveryProducts>()
+                .HasKey(dp => new { dp.DeliveryId, dp.ProductId });
 
-            //builder.Entity<Product>()
-            //    .HasMany(p => p.ReleaseProducts)
+            modelBuilder.Entity<ReleaseProducts>()
+                .HasOne(rp => rp.Release)
+                .WithMany(r => r.ReleaseProducts)
+                .HasForeignKey(rp => rp.ReleaseId);
 
-            //builder.Entity<ReleaseProducts>()
-            //    .HasOne(rp => rp.Release)
-            //    .WithMany(r => r.Product)
-            //    .HasForeignKey(rp => rp.ReleaseId);
+            modelBuilder.Entity<ReleaseProducts>()
+                .HasOne(rp => rp.Product)
+                .WithMany(p => p.ReleaseProducts)
+                .HasForeignKey(rp => rp.ProductId);
 
-            //builder.Entity<ReleaseProducts>()
-            //    .HasOne(rp => rp.Product)
-            //    .WithMany
+            modelBuilder.Entity<DeliveryProducts>()
+                .HasOne(dp => dp.Delivery)
+                .WithMany(d => d.DeliveryProducts)
+                .HasForeignKey(dp => dp.DeliveryId);
 
-            //builder.Entity<DeliveryProducts>()
-            //    .HasOne(rp => rp.Delivery)
-            //    .WithMany(r => r.ReleaseProducts)
-            //    .HasForeignKey(rp => rp.ReleaseId);
+            modelBuilder.Entity<DeliveryProducts>()
+                .HasOne(dp => dp.Product)
+                .WithMany(p => p.DeliveryProducts)
+                .HasForeignKey(dp => dp.ProductId);
 
-            builder.Equals(builder.Entity<Stock>()
-                                .HasKey(s => new { s.ProductId, s.Quantity }));
-
-            base.OnModelCreating(builder);
+            modelBuilder.Entity<Stock>()
+                .HasKey(s => s.ProductId);
         }
-        public DbSet<StoragewithComputerParts.Models.Contractor> Contractor { get; set; } = default!;
-        public DbSet<StoragewithComputerParts.Models.Product> Product { get; set; } = default!;
     }
 }

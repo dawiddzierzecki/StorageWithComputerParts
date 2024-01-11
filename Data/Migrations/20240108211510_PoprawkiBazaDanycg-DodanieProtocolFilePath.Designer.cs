@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoragewithComputerParts.Data;
 
@@ -11,9 +12,11 @@ using StoragewithComputerParts.Data;
 namespace StoragewithComputerParts.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240108211510_PoprawkiBazaDanycg-DodanieProtocolFilePath")]
+    partial class PoprawkiBazaDanycgDodanieProtocolFilePath
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,9 +236,11 @@ namespace StoragewithComputerParts.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContractorId"));
 
                     b.Property<string>("ContractorAddress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContractorCity")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContractorEmail")
@@ -255,9 +260,11 @@ namespace StoragewithComputerParts.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContractorPostalCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContractorWebsite")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ContractorId");
@@ -500,7 +507,7 @@ namespace StoragewithComputerParts.Data.Migrations
             modelBuilder.Entity("StoragewithComputerParts.Models.DeliveryProducts", b =>
                 {
                     b.HasOne("StoragewithComputerParts.Models.Delivery", "Delivery")
-                        .WithMany("DeliveryProducts")
+                        .WithMany()
                         .HasForeignKey("DeliveryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -544,7 +551,7 @@ namespace StoragewithComputerParts.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("StoragewithComputerParts.Models.Release", "Release")
-                        .WithMany("ReleaseProducts")
+                        .WithMany()
                         .HasForeignKey("ReleaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -572,11 +579,6 @@ namespace StoragewithComputerParts.Data.Migrations
                     b.Navigation("Releases");
                 });
 
-            modelBuilder.Entity("StoragewithComputerParts.Models.Delivery", b =>
-                {
-                    b.Navigation("DeliveryProducts");
-                });
-
             modelBuilder.Entity("StoragewithComputerParts.Models.Product", b =>
                 {
                     b.Navigation("DeliveryProducts");
@@ -591,11 +593,6 @@ namespace StoragewithComputerParts.Data.Migrations
                     b.Navigation("Delivery");
 
                     b.Navigation("Release");
-                });
-
-            modelBuilder.Entity("StoragewithComputerParts.Models.Release", b =>
-                {
-                    b.Navigation("ReleaseProducts");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<StoragewithComputerParts.Models.Delivery>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>List od Deliveries</h1>
+
+<p>
+    <a asp-action="Add">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contractor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Protocol)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contractor.ContractorEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Protocol.ProtocolId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DeliveryId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DeliveryId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DeliveryId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
